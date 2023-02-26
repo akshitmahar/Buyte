@@ -129,7 +129,9 @@ export const updatePic = asyncError(async (req, res, next) => {
 
   const file = getDataUri(req.file);
 
-  await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+  if (user.avatar && user.avatar.public_id) {
+    await cloudinary.v2.uploader.destroy(user.avatar.public_id);
+  }
 
   const myCloud = await cloudinary.v2.uploader.upload(file.content);
   user.avatar = {
@@ -144,6 +146,7 @@ export const updatePic = asyncError(async (req, res, next) => {
     message: "Avatar Updated Successfully",
   });
 });
+
 
 export const forgetpassword = asyncError(async (req, res, next) => {
   const { email } = req.body;
